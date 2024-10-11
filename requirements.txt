@@ -1,0 +1,13 @@
+fastapi
+pydantic
+uvicorn
+unittest2
+python-dotenv
+loguru
+psycopg2
+psycopg2-binary
+requests
+pylint
+
+
+
