@@ -37,5 +37,5 @@ jobs:
       
       - name: Run Pylint
         run: |
-          pylint --const-rgx='[a-z_][a-z0-9_]{2,30}$' **/*.py
+          flake8 .
         continue-on-error: true

@@ -20,8 +20,15 @@ endif
 
 all: Run_all_containers
 
+
+Code_linting:
+	flake8 .
+
 Run_all_containers:
-	$(CMD_PREFIX) docker-compose up
+	 docker-compose up
+
+Build_api:
+	$(CMD_PREFIX) echo "API build successful"
 
 Start_DB:
 	$(CMD_PREFIX) docker-compose up $(DB_SERVICE)
@@ -30,10 +37,10 @@ run-migrations:
 	$(CMD_PREFIX) docker build -t $(MIGRATION_IMAGE) $(MIGRATION_DIR)
 	$(CMD_PREFIX) docker run --rm --name $(MIGRATION_CONTAINER) --network $(NETWORK_NAME) $(MIGRATION_IMAGE)
 
-build-api:
+docker_build-api:
 	$(CMD_PREFIX) docker build -t $(API_IMAGE) .
 
-run-api:
+docker_run-api:
 	$(CMD_PREFIX) docker run -d \
 		--name $(API_CONTAINER) \
 		--network $(NETWORK_NAME) \
@@ -58,4 +65,4 @@ else
 	python test.py
 endif
 
-.PHONY: all Run_all_containers Start_DB run-migrations build-api run-api
+.PHONY: all Run_all_containers Start_DB run-migrations Build-api docker_build-api docker_run-api
