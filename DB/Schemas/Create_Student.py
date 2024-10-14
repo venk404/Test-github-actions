@@ -3,15 +3,12 @@ import time
 import os
 from dotenv import load_dotenv
 
-
-
 load_dotenv()
 db_name = os.getenv('POSTGRES_DB')
 db_user = os.getenv('POSTGRES_USER')
 db_password = os.getenv('POSTGRES_PASSWORD')
 db_host = os.getenv('POSTGRES_HOST')
 db_port = os.getenv('POSTGRES_PORT')
-
 
 while True:
     try:
@@ -21,7 +18,6 @@ while True:
                                 host=db_host,
                                 port=db_port)
         cur = conn.cursor()
-
         create_student_table = cur.execute("""
         CREATE TABLE IF NOT EXISTS students (
             ID SERIAL PRIMARY KEY,
@@ -39,6 +35,6 @@ while True:
         conn.close()
         break
     except (Exception, psycopg2.DatabaseError) as error:
-        print("Schema Not Created")
+        print("Schema Not Created Errors:", error)
         time.sleep(10)
         continue
