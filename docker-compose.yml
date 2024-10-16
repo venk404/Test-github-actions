@@ -6,10 +6,8 @@ networks:
 
 services:
   restapi:
-    build:
-      context: .
-      dockerfile: Dockerfile  # Name of your Dockerfile if it's not the default "Dockerfile"
-    image: restapi:v${dev}
+    # Name of your Dockerfile if it's not the default "Dockerfile"
+    image: restapi:latest
     depends_on:
       postgres:
         condition: service_healthy
