@@ -7,7 +7,7 @@ loguru
 psycopg2
 psycopg2-binary
 requests
-pylint
+flake8
 pydantic[email]
 
 
