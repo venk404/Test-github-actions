@@ -12,21 +12,19 @@ db_port = os.getenv('POSTGRES_PORT')
 
 while True:
     try:
-        conn = psycopg.connect(database=db_name,
-                                user=db_user,
-                                password=db_password,
-                                host=db_host,
-                                port=db_port)
+        conn = psycopg.connect(
+            database=db_name,
+            user=db_user, password=db_password,
+            host=db_host, port=db_port)
         cur = conn.cursor()
-        create_student_table = cur.execute("""
+        create_table_query = """
         CREATE TABLE IF NOT EXISTS students (
             ID SERIAL PRIMARY KEY,
             name VARCHAR(255),
             email VARCHAR(255),
             age INTEGER,
             phone VARCHAR(50)
-        );
-        """)
+        )"""
         print("Schema Created")
         # Make the changes to the database persistent
         conn.commit()

@@ -22,7 +22,9 @@ all: Run_all_containers
 
 
 Code_linting:
-	flake8 .
+	flake8 ./code/
+	flake8 ./test/
+	flake8 ./DB/
 
 Run_all_containers:
 	 docker-compose up
@@ -60,9 +62,9 @@ endif
 
 test:
 ifeq ($(OS),Windows_NT)
-	python test.py
+	python ./test/test.py
 else
-	python test.py
+	python ./test/test.py
 endif
 
-.PHONY: all Run_all_containers Start_DB run-migrations Build-api docker_build-api docker_run-api
+.PHONY: all test clean Code_linting Run_all_containers Start_DB run-migrations Build-api docker_build-api docker_run-api

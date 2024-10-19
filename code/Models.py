@@ -17,11 +17,10 @@ db_password = os.getenv('POSTGRES_PASSWORD')
 db_host = os.getenv('POSTGRES_HOST')
 db_port = os.getenv('POSTGRES_PORT')
 
-conn = psycopg.connect(database=db_name,
-                        user=db_user,
-                        password=db_password,
-                        host=db_host,
-                        port=db_port)
+conn = psycopg.connect(
+            database=db_name,
+            user=db_user, password=db_password,
+            host=db_host, port=db_port)
 
 cur = conn.cursor(row_factory=dict_row)
 
