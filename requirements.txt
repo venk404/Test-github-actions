@@ -4,11 +4,8 @@ uvicorn
 unittest2
 python-dotenv
 loguru
-psycopg2
-psycopg2-binary
 requests
 flake8
 pydantic[email]
-
-
-
+psycopg2
+psycopg2-binary

@@ -1,11 +1,25 @@
 name: Build the PR
 
 on:
+  push:
+    paths:
+      - 'code/**'
+      - 'test/**'
+      - 'DB/Schemas/**'
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - 'code/**'
+      - 'test/**'
     branches:
       - master
       - main  # Added main branch for completeness
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual build request'
 
 jobs:
   build:
