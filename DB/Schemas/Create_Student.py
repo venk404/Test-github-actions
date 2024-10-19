@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg
 import time
 import os
 from dotenv import load_dotenv
@@ -12,7 +12,7 @@ db_port = os.getenv('POSTGRES_PORT')
 
 while True:
     try:
-        conn = psycopg2.connect(database=db_name,
+        conn = psycopg.connect(database=db_name,
                                 user=db_user,
                                 password=db_password,
                                 host=db_host,
@@ -34,7 +34,7 @@ while True:
         cur.close()
         conn.close()
         break
-    except (Exception, psycopg2.DatabaseError) as error:
+    except (Exception, psycopg.DatabaseError) as error:
         print("Schema Not Created Errors:", error)
         time.sleep(10)
         continue
