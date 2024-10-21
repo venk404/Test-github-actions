@@ -1,11 +1,10 @@
-import psycopg
-from psycopg.rows import dict_row
+import psycopg2
+from psycopg2.extras import RealDictCursor
 import os
 from dotenv import load_dotenv
 from loguru import logger
 import sys
 
-import psycopg.rows
 
 logger.add(sys.stdout, format="{time} {level} {message}",
            filter="my_module", backtrace=True)
@@ -17,28 +16,22 @@ db_password = os.getenv('POSTGRES_PASSWORD')
 db_host = os.getenv('POSTGRES_HOST')
 db_port = os.getenv('POSTGRES_PORT')
 
-conn = psycopg.connect(
+conn = psycopg2.connect(
             database=db_name,
             user=db_user, password=db_password,
             host=db_host, port=db_port)
 
-cur = conn.cursor(row_factory=dict_row)
+cur = conn.cursor(cursor_factory=RealDictCursor)
 
 
 def insertstudent(data: dict):
     try:
-        insert_query = """
-        INSERT INTO students (name, email, age, phone)
-        VALUES (%s, %s, %s, %s)
-        RETURNING ID;
-        """
-        cur.execute(insert_query, (data.name,
-                                   data.email, data.age, data.phone))
+        insert_query = """INSERT INTO students (name, email, age, phone) VALUES (%s, %s, %s, %s) RETURNING ID;"""
+        cur.execute(insert_query, (data.name, data.email, data.age, data.phone))
         student_id = cur.fetchone()
         conn.commit()
-        return {"status": "success", "message":
-                "Student inserted successfully", "student_id": student_id}
-    except psycopg.Error as e:
+        return {"status": "success", "message": "Student inserted successfully", "student_id": student_id}
+    except psycopg2.Error as e:
         conn.rollback()
         logger.error(f'error:"{str(e)}')
         return {"status": "error", "message": str(e)}
@@ -57,7 +50,7 @@ def get_all_students():
                     "Student inserted successfully", "students": students}
         else:
             return {"status": "error", "message": "No Data Present"}
-    except psycopg.Error as e:
+    except psycopg2.Error as e:
         conn.rollback()
         logger.error(f'error:"{str(e)}')
         return {"status": "error", "message": str(e)}
@@ -75,7 +68,7 @@ def get_student_by_Id(id):
             return {"status": "success", "students": students}
         else:
             return {"status": "error", "message": "No Data found"}
-    except psycopg.Error as e:
+    except psycopg2.Error as e:
         conn.rollback()
         logger.error(f'error:"{str(e)}')
         return {"status": "error", "message": str(e)}
@@ -111,7 +104,7 @@ def Update_student(id, student):
             else:
                 return {"status": "error", "message": "No Data found"}
 
-    except psycopg.Error as e:
+    except psycopg2.Error as e:
         conn.rollback()
         logger.error(f'error:"{str(e)}')
         return {"status": "error", "message": str(e)}
@@ -129,7 +122,7 @@ def delete_student(id):
                     "Student deleted successfully"}
         else:
             return {"status": "error", "message": "Student not found"}
-    except psycopg.Error as e:
+    except psycopg2.Error as e:
         conn.rollback()
         logger.error(f'error:"{str(e)}')
         return {"status": "error", "message": str(e)}

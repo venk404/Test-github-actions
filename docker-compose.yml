@@ -6,7 +6,9 @@ networks:
 
 services:
   restapi:
-    # Name of your Dockerfile if it's not the default "Dockerfile"
+    build:
+      context: .
+      dockerfile: Dockerfile  # Name of your Dockerfile if it's not the default "Dockerfile"
     image: venkateshtangaraj/restapi:latest
     depends_on:
       postgres:
