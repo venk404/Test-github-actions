@@ -22,12 +22,10 @@ all: Run_all_containers
 
 
 Code_linting:
-	flake8 ./code/
-	flake8 ./test/
-	flake8 ./DB/
+	python -m flake8 .
 
 Run_all_containers:
-	 docker-compose up
+	docker-compose up
 
 Build_api:
 	$(CMD_PREFIX) echo "API build successful"

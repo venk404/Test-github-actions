@@ -8,9 +8,11 @@ load_dotenv()
 
 url = os.getenv('test_url')
 
+
 class TestStudentDetailsAPI(unittest.TestCase):
+
     student_id = None
-    
+
     def setUp(self):
         self.url = url
         self.student_data = {

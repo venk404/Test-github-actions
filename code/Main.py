@@ -10,6 +10,7 @@ import sys
 
 
 class Student(BaseModel):
+
     name: str = Field(examples=["Ganesh Gaitonde"])
     email: EmailStr = Field(examples=["Gopalmat@gmail.com"])
     age: int = Field(examples=[22])
