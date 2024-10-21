@@ -1,6 +1,12 @@
 name: Build the PR
 
 on:
+  push:
+    paths:
+      - 'code/**'
+      - 'test/**'
+      - 'DB/Schemas/**'
+      - 'build.yml'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -28,10 +34,10 @@ jobs:
         with:
           fetch-depth: 0  # Fetch all history for all branches and tags
       
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.12'
       
       - name: Cache pip packages
         uses: actions/cache@v3
