@@ -33,5 +33,5 @@ RUN apk add --no-cache libpq
 EXPOSE 8000
 
 # Run the application
-CMD ["sh", "-c", "venv/bin/python DB/Schemas/Create_Student.py && venv/bin/uvicorn Main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "venv/bin/python DB/Schemas/Create_Student.py && cd code && python Main.py"]
 

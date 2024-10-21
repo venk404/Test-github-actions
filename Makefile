@@ -22,10 +22,10 @@ all: Run_all_containers
 
 
 Code_linting:
-	flake8 .
+	python -m flake8 .
 
 Run_all_containers:
-	 docker-compose up
+	docker-compose up
 
 Build_api:
 	$(CMD_PREFIX) echo "API build successful"
@@ -48,6 +48,23 @@ docker_run-api:
 		$(API_IMAGE)
 
 
+install: $(VENV)/Scripts/activate
+
+$(VENV)/Scripts/activate: requirements.txt
+	python -m venv $(VENV)
+
+ifeq ($(OS),Windows_NT)
+	$(VENV)\Scripts\activate.ps1
+	$(VENV)\Scripts\python -m pip install --upgrade pip
+	$(VENV)\Scripts\pip install -r requirements.txt
+else
+	chmod +x $(VENV)/bin/activate
+	$(VENV)/bin/activate
+	$(VENV)/bin/python -m pip install --upgrade pip
+	$(VENV)/bin/pip install -r requirements.txt
+endif
+
+
 # Define a clean step
 clean:
 ifeq ($(OS),Windows_NT)
@@ -60,9 +77,9 @@ endif
 
 test:
 ifeq ($(OS),Windows_NT)
-	python test.py
+	python ./test/test.py
 else
-	python test.py
+	python ./test/test.py
 endif
 
-.PHONY: all Run_all_containers Start_DB run-migrations Build-api docker_build-api docker_run-api
+.PHONY: all test clean Code_linting Run_all_containers Start_DB run-migrations Build-api docker_build-api docker_run-api

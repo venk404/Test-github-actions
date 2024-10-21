@@ -1,12 +1,20 @@
 import unittest
 import requests
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+
+url = os.getenv('test_url')
 
 
 class TestStudentDetailsAPI(unittest.TestCase):
+
     student_id = None
 
     def setUp(self):
-        self.url = "http://127.0.0.1:8000/"
+        self.url = url
         self.student_data = {
             "name": "Foo",
             "email": "foo@example.com",

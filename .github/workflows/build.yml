@@ -1,15 +1,32 @@
 name: Build the PR
 
 on:
+  push:
+    paths:
+      - 'code/**'
+      - 'test/**'
+      - 'DB/Schemas/**'
+      - 'build.yml'
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - 'code/**'
+      - 'test/**'
+      - 'DB/Schemas/**'
     branches:
       - master
       - main  # Added main branch for completeness
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual build request'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
     
     steps:
       - name: Checkout code
@@ -17,10 +34,10 @@ jobs:
         with:
           fetch-depth: 0  # Fetch all history for all branches and tags
       
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.12'
       
       - name: Cache pip packages
         uses: actions/cache@v3
@@ -36,8 +53,8 @@ jobs:
           pip install --no-cache-dir -r requirements.txt
 
       - name: Build Api
-        run: |
-          make Build_api
+        run: 
+            make Build_api
 
       - name: Run tests
         run: |

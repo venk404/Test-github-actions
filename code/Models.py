@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from loguru import logger
 import sys
 
+
 logger.add(sys.stdout, format="{time} {level} {message}",
            filter="my_module", backtrace=True)
 load_dotenv()
@@ -15,24 +16,20 @@ db_password = os.getenv('POSTGRES_PASSWORD')
 db_host = os.getenv('POSTGRES_HOST')
 db_port = os.getenv('POSTGRES_PORT')
 
-conn = psycopg2.connect(database=db_name,
-                        user=db_user,
-                        password=db_password,
-                        host=db_host,
-                        port=db_port)
+conn = psycopg2.connect(
+            database=db_name,
+            user=db_user, password=db_password,
+            host=db_host, port=db_port)
 
 cur = conn.cursor(cursor_factory=RealDictCursor)
 
 
 def insertstudent(data: dict):
     try:
-        insert_query = """
-        INSERT INTO students (name, email, age, phone)
-        VALUES (%s, %s, %s, %s)
-        RETURNING ID;
-        """
-        cur.execute(insert_query, (data.name,
-                                   data.email, data.age, data.phone))
+        insert_query = """INSERT INTO students (name, email, age, phone)
+                        VALUES (%s, %s, %s, %s) RETURNING ID;"""
+        cur.execute(insert_query, (data.name, data.email,
+                                   data.age, data.phone))
         student_id = cur.fetchone()
         conn.commit()
         return {"status": "success", "message":
