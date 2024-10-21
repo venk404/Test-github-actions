@@ -26,11 +26,14 @@ cur = conn.cursor(cursor_factory=RealDictCursor)
 
 def insertstudent(data: dict):
     try:
-        insert_query = """INSERT INTO students (name, email, age, phone) VALUES (%s, %s, %s, %s) RETURNING ID;"""
-        cur.execute(insert_query, (data.name, data.email, data.age, data.phone))
+        insert_query = """INSERT INTO students (name, email, age, phone)
+                        VALUES (%s, %s, %s, %s) RETURNING ID;"""
+        cur.execute(insert_query, (data.name, data.email,
+                                   data.age, data.phone))
         student_id = cur.fetchone()
         conn.commit()
-        return {"status": "success", "message": "Student inserted successfully", "student_id": student_id}
+        return {"status": "success", "message":
+                "Student inserted successfully", "student_id": student_id}
     except psycopg2.Error as e:
         conn.rollback()
         logger.error(f'error:"{str(e)}')

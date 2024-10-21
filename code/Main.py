@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi import APIRouter
 from pydantic import BaseModel, EmailStr, Field
-from Models import insertstudent, get_all_students, get_student_by_Id, Update_student, delete_student
+from Models import insertstudent, get_all_students
+from Models import get_student_by_Id, Update_student, delete_student
 import uvicorn
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
