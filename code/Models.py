@@ -71,10 +71,12 @@ def get_student_by_Id(id):
             return {"status": "success", "students": students}
         else:
             return {"status": "error", "message": "No Data found"}
-    except psycopg2.Error as e:
+    except Exception as e:
+        # Catch Unexpected Errors
         conn.rollback()
-        logger.error(f'error:"{str(e)}')
-        return {"status": "error", "message": str(e)}
+        logger.error(f"Unexpected error: {e}")
+        return {"status": "error", "message":
+                "An unexpected error occurred. Please contact support."}
 
 
 def Update_student(id, student):
@@ -82,30 +84,34 @@ def Update_student(id, student):
         update_fields = []
         update_values = []
 
-        if student.name is not None:
+        if student.name is not None and student.name != "":
             update_fields.append("name = %s")
             update_values.append(student.name)
-        if student.email is not None:
+        if student.email is not None and student.email != "":
             update_fields.append("email = %s")
             update_values.append(student.email)
-        if student.age is not None:
+        if student.age is not None and student.email != "":
             update_fields.append("age = %s")
             update_values.append(student.age)
-        if student.phone is not None:
+        if student.phone is not None and student.email != "":
             update_fields.append("phone = %s")
             update_values.append(student.phone)
 
+        if not update_fields:
+            logger.warning("No fields provided for update")
+            return {"status": "error", "message":
+                    "Please provide at least one field to update."}
+
         update_values.append(id)
-        if update_fields:
-            update_query = f'''UPDATE students SET {', '.join(update_fields)}
-            WHERE id = %s;'''
-            cur.execute(update_query, update_values)
-            conn.commit()
-            rows_affected = cur.rowcount
-            if rows_affected > 0:
-                return {"status": "success", "students": "Data is updated"}
-            else:
-                return {"status": "error", "message": "No Data found"}
+        update_query = f'''UPDATE students SET {', '.join(update_fields)}
+        WHERE id = %s;'''
+        cur.execute(update_query, update_values)
+        conn.commit()
+        rows_affected = cur.rowcount
+        if rows_affected > 0:
+            return {"status": "success", "message": "Data is updated"}
+        else:
+            return {"status": "error", "message": "No Data found"}
 
     except psycopg2.Error as e:
         conn.rollback()
@@ -127,5 +133,5 @@ def delete_student(id):
             return {"status": "error", "message": "Student not found"}
     except psycopg2.Error as e:
         conn.rollback()
-        logger.error(f'error:"{str(e)}')
-        return {"status": "error", "message": str(e)}
+        logger.error(f"Database error: {str(e)}")
+        return {"status": "error", "message": "Database error occurred"}

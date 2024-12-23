@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 
-url = os.getenv('test_url')
+url = f"{os.getenv('test_url')}:{os.getenv('APP_PORT')}/"
 
 
 class TestStudentDetailsAPI(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestStudentDetailsAPI(unittest.TestCase):
             "name": "Foo",
             "email": "foo@example.com",
             "age": 20,
-            "phone": 1234567890
+            "phone": "1234567890"
         }
 
     def test_post_studentdetails(self):
@@ -49,7 +49,7 @@ class TestStudentDetailsAPI(unittest.TestCase):
             'name': 'Ganesh Gaitonde',
             'email': 'Gopalmat@gmail.com',
             'age': 0,
-            'phone': 0
+            'phone': '1234567895'
         }
         response = requests.patch(url, json=update_data)
         self.assertEqual(response.status_code, 200,

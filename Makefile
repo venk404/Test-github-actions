@@ -2,21 +2,9 @@
 
 # Variables
 VENV := venv
-DB_SERVICE := postgres
-MIGRATION_DIR := ./DB/Schemas
-MIGRATION_IMAGE := migrations_img
-MIGRATION_CONTAINER := migrations_container
-NETWORK_NAME := dem
-API_IMAGE := restapi
-API_CONTAINER := restapi
-API_PORT := 8000
+include .env
 
-# Determine OS-specific command prefix
-ifeq ($(OS),Windows_NT)
-    CMD_PREFIX :=
-else
-    CMD_PREFIX := 
-endif
+
 
 all: Run_all_containers
 
@@ -31,21 +19,20 @@ Build_api:
 	$(CMD_PREFIX) echo "API build successful"
 
 Start_DB:
-	$(CMD_PREFIX) docker-compose up $(DB_SERVICE)
+	docker-compose up $(POSTGRES_HOST)
 
 run-migrations:
-	$(CMD_PREFIX) docker build -t $(MIGRATION_IMAGE) $(MIGRATION_DIR)
-	$(CMD_PREFIX) docker run --rm --name $(MIGRATION_CONTAINER) --network $(NETWORK_NAME) $(MIGRATION_IMAGE)
+	docker-compose up $(MIGRATION_SERVICE)
 
 docker_build-api:
-	$(CMD_PREFIX) docker build -t $(API_IMAGE) .
+	docker build -t $(IMAGE_NAME) .
 
 docker_run-api:
-	$(CMD_PREFIX) docker run -d \
-		--name $(API_CONTAINER) \
-		--network $(NETWORK_NAME) \
-		-p $(API_PORT):$(API_PORT) \
-		$(API_IMAGE)
+	docker run -d \
+		--name $(CONTAINER_NAME) \
+		--network $(DOCKER_NETWORK) \
+		-p $(APP_PORT):$(APP_PORT) \
+		$(IMAGE_NAME):$(IMAGE_VERSION)
 
 
 install: $(VENV)/Scripts/activate
